@@ -1,14 +1,22 @@
-import { Box, Grid, Typography, IconButton , Divider} from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  IconButton,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useState, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-import { Keyboard } from "swiper/modules";
+import { Keyboard, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/keyboard";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 const images = [
   "/images/test.jpeg",
@@ -23,6 +31,9 @@ const Gallery = () => {
   const [open, setOpen] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
   const swiperRef = useRef(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleOpen = (index) => {
     setStartIndex(index);
@@ -53,30 +64,61 @@ const Gallery = () => {
         Galería
       </Typography>
 
-      <Grid container spacing={2} justifyContent="center">
-        {images.map((src, index) => (
-          <Grid item key={index} xs={6} sm={4} md={3}>
-            <Box
-              component="img"
-              src={src}
-              alt={`Imagen ${index + 1}`}
-              onClick={() => handleOpen(index)}
-              sx={{
-                width: "100%",
-                height: { xs: 160, sm: 220, md: 250 },
-                objectFit: "cover",
-                borderRadius: 2,
-                cursor: "pointer",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                  boxShadow: 3,
-                },
-              }}
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {/* MOBILE - Swiper con redondelitos */}
+      {isMobile ? (
+        <Swiper
+          modules={[Keyboard, Pagination]}
+          pagination={{ clickable: true }}
+          keyboard
+          slidesPerView={1}
+          spaceBetween={16}
+          style={{ width: "100%" }}
+        >
+          {images.map((src, index) => (
+            <SwiperSlide key={index}>
+              <Box
+                component="img"
+                src={src}
+                alt={`Imagen ${index + 1}`}
+                onClick={() => handleOpen(index)}
+                sx={{
+                  width: "100%",
+                  height: 240,
+                  objectFit: "cover",
+                  borderRadius: 2,
+                  cursor: "pointer",
+                }}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        // DESKTOP - Grid
+        <Grid container spacing={2} justifyContent="center">
+          {images.map((src, index) => (
+            <Grid item key={index} xs={6} sm={4} md={3}>
+              <Box
+                component="img"
+                src={src}
+                alt={`Imagen ${index + 1}`}
+                onClick={() => handleOpen(index)}
+                sx={{
+                  width: "100%",
+                  height: { xs: 160, sm: 220, md: 250 },
+                  objectFit: "cover",
+                  borderRadius: 2,
+                  cursor: "pointer",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: 3,
+                  },
+                }}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       {/* Modal lightbox */}
       {open && (
@@ -156,7 +198,7 @@ const Gallery = () => {
               <ArrowForwardIosIcon fontSize="small" />
             </IconButton>
 
-            {/* Swiper */}
+            {/* Swiper modal */}
             <Swiper
               initialSlide={startIndex}
               keyboard
@@ -185,8 +227,6 @@ const Gallery = () => {
           </Box>
         </Box>
       )}
-
-      
     </Box>
   );
 };

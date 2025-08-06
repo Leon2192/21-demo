@@ -6,8 +6,10 @@ import {
   Fade,
   Backdrop,
   Divider,
+  IconButton,
 } from "@mui/material";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -46,7 +48,7 @@ const Gift = () => {
           <Typography
             variant="h5"
             sx={{
-               fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Playfair Display', serif",
               fontWeight: "bold",
               fontSize: { xs: "1.5rem", md: "2rem" },
               maxWidth: 600,
@@ -97,17 +99,45 @@ const Gift = () => {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              bgcolor: "#fff",
-              borderRadius: 2,
+              bgcolor: "#fdfaff", // más claro
+              borderRadius: 3,
               boxShadow: 24,
               p: 4,
-              maxWidth: 400,
+              maxWidth: 600,
+              width: "90%",
               textAlign: "center",
             }}
           >
+            {/* Botón cerrar */}
+            <IconButton
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "#666",
+                "&:hover": {
+                  color: "#9a64ea",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+
+            {/* Ícono en el modal */}
+            <CardGiftcardIcon
+              sx={{
+                fontSize: 60,
+                color: "#9a64ea",
+                mb: 2,
+              }}
+            />
+
             <Typography variant="h6" fontWeight="bold" gutterBottom>
               Datos Bancarios
             </Typography>
+
             <Typography variant="body1" gutterBottom>
               Nombre del Titular: Nombre Apellido
               <br />
@@ -120,10 +150,16 @@ const Gift = () => {
               Banco Galicia
             </Typography>
 
-            <Typography variant="h6" fontWeight="bold" gutterBottom mt={3}>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              gutterBottom
+              sx={{ mt: 3 }}
+            >
               Lista de Regalos
             </Typography>
-            <Typography variant="body1">Falabella Novios</Typography>
+
+            <Typography variant="body1">Black Novios</Typography>
           </Box>
         </Fade>
       </Modal>
